@@ -119,3 +119,31 @@ assert('Schash::Validator#validate: optional hash') do
     end
   end
 end
+
+assert('Schash::Validator#validate: is not Hash error') do
+  validator = Schash::Validator.new do
+    {
+      foo: {
+        bar: optional({
+          baz: string,
+        }),
+      },
+    }
+  end
+
+  [
+    [{foo: {}}, []],
+    [{foo: 1}, [[["foo"], "is not Hash"]]],
+    [{foo: nil}, [[["foo"], "is not Hash"]]],
+    [{foo: {bar: {baz: "a"}}}, []],
+    [{foo: {bar: 1}}, [[["foo", "bar"], "is not Hash"]]],
+    [{foo: {bar: nil}}, [[["foo", "bar"], "is not Hash"]]],
+  ].each do |data, expected|
+    errors = validator.validate(data)
+    assert_equal expected.size, errors.size
+    errors.each_with_index do |error, i|
+      assert_equal expected[i][0], error.position
+      assert_equal expected[i][1], error.message
+    end
+  end
+end
