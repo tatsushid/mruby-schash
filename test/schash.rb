@@ -93,3 +93,29 @@ assert('Schash::Validator#validate: with invalid data') do
     assert_equal expected[i][1], error.message
   end
 end
+
+assert('Schash::Validator#validate: optional hash') do
+  validator = Schash::Validator.new do
+    {
+      foo: {
+        bar: optional({
+          baz: string,
+        }),
+      },
+    }
+  end
+
+  [
+    [{foo: {}}, []],
+    [{foo: {qux: 1}}, []],
+    [{foo: {bar: {}}}, [[["foo", "bar", "baz"], "is required but missing"]]],
+    [{foo: {bar: {baz: 1}}}, [[["foo", "bar", "baz"], "is not String"]]],
+  ].each do |data, expected|
+    errors = validator.validate(data)
+    assert_equal expected.size, errors.size
+    errors.each_with_index do |error, i|
+      assert_equal expected[i][0], error.position
+      assert_equal expected[i][1], error.message
+    end
+  end
+end
