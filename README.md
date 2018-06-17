@@ -3,7 +3,7 @@ mruby-schash
 
 [![Build Status](https://travis-ci.org/tatsushid/mruby-schash.svg?branch=master)](https://travis-ci.org/tatsushid/mruby-schash)
 
-[Schash][schash] for [mruby](http://mruby.org/)
+[Schash][schash] Ruby hash validator for [mruby](http://mruby.org/)
 
 ## Installation
 
