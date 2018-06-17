@@ -7,6 +7,7 @@ MRuby::Gem::Specification.new('mruby-schash') do |spec|
   spec.summary = 'Ruby hash validator for mruby'
 
   spec.add_dependency 'mruby-struct',     core: 'mruby-struct'
+  spec.add_dependency 'mruby-enumerator', core: 'mruby-enumerator'
   spec.add_dependency 'mruby-array-ext',  core: 'mruby-array-ext'
   spec.add_dependency 'mruby-hash-ext',   core: 'mruby-hash-ext'
   spec.add_dependency 'mruby-symbol-ext', core: 'mruby-symbol-ext'
