@@ -7,7 +7,7 @@ module Schash
         end
 
         def validate(target, position = [])
-          return Error.new(position, "is not Hash") unless target.is_a?(::Hash)
+          return [Error.new(position, "is not Hash")] unless target.is_a?(::Hash)
 
           @schema_hash.map do |key, rule|
             if rule.is_a?(::Hash)
