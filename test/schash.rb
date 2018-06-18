@@ -147,3 +147,61 @@ assert('Schash::Validator#validate: is not Hash error') do
     end
   end
 end
+
+assert('Schash::Validator#validate: with MapOf rule') do
+  validator = Schash::Validator.new do
+    {
+      foo: map_of(
+        symbol, {
+          bar: string,
+        }
+      ),
+    }
+  end
+
+  [
+    [
+      {foo: {}},
+      [],
+    ],
+    [
+      {foo: 1},
+      [[["foo"], "is not Map"]],
+    ],
+    [
+      {foo: nil},
+      [[["foo"], "is not Map"]],
+    ],
+    [
+      {foo: {baz: {bar: "a"}}},
+      [],
+    ],
+    [
+      {foo: {'baz' => {bar: "a"}}},
+      [[["foo", "baz key"], "is not Symbol"]],
+    ],
+    [
+      {foo: {baz: {bar: 1}}},
+      [[["foo", "baz", "bar"], "is not String"]],
+    ],
+    [
+      {foo: {baz: {bar: "a"}, qux: {bar: "b"}}},
+      [],
+    ],
+    [
+      {foo: {baz: {bar: "a"}, 'qux' => {bar: "b"}}},
+      [[["foo", "qux key"], "is not Symbol"]],
+    ],
+    [
+      {foo: {baz: {bar: "a"}, qux: {bar: 1}}},
+      [[["foo", "qux", "bar"], "is not String"]],
+    ],
+  ].each do |data, expected|
+    errors = validator.validate(data)
+    assert_equal expected.size, errors.size
+    errors.each_with_index do |error, i|
+      assert_equal expected[i][0], error.position
+      assert_equal expected[i][1], error.message
+    end
+  end
+end

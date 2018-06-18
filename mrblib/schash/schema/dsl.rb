@@ -9,6 +9,10 @@ module Schash
         Rule::ArrayOf.new(schema)
       end
 
+      def map_of(schema_key, schema_value)
+        Rule::MapOf.new(schema_key, schema_value)
+      end
+
       def one_of_types(*schemas)
         Rule::OneOfTypes.new(*schemas)
       end
